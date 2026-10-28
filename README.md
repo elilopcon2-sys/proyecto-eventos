@@ -28,7 +28,7 @@ La aplicación está organizada mediante una arquitectura por capas, facilitando
 1. Clonar el repositorio:
 
 ```bash
-git clone URL_DEL_REPOSITORIO
+git clone https://github.com/elilopcon2-sys/proyecto-eventos.git
 ```
 
 2. Ingresar a la carpeta del proyecto:
