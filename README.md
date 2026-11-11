@@ -62,7 +62,7 @@ Las variables utilizadas son:
 | MONGO_URL | URL de conexión a MongoDB |
 | JWT_SECRET | Clave secreta para autenticación JWT |
 
-Por ahora, MONGO_URL y JWT_SECRET quedan sin configurar, ya que su implementación corresponde a futuras entregas.
+`MONGO_URL` es obligatoria para iniciar el servidor y debe contener la cadena de conexión de MongoDB Atlas. Nunca subas el archivo `.env` ni sus credenciales al repositorio.
 
 ## Ejecución del proyecto
 
@@ -111,6 +111,7 @@ La API cuenta actualmente con los siguientes endpoints:
 | GET | /api/health | Verifica que el servidor esté activo |
 | GET | /api/events | Retorna la lista de eventos (actualmente vacía) |
 | GET | /api/sessions | Verifica que el módulo de sesiones esté preparado |
+| POST | /api/sessions/register | Registra un usuario de forma segura |
 
 ### Ejemplo de respuesta de GET /api/events
 
@@ -122,3 +123,11 @@ La API cuenta actualmente con los siguientes endpoints:
 ```
 
 Las funcionalidades de autenticación, gestión de eventos e inscripciones se implementarán en próximas entregas.
+
+## Registro seguro de usuarios
+
+### Endpoint
+
+```text
+POST /api/sessions/register
+
