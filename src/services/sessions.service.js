@@ -1,5 +1,5 @@
 import { getUserByEmail, saveUser } from "../repositories/users.repository.js";
-import { hashPassword } from "../utils/hash.js";
+import { hashPassword, comparePassword } from "../utils/hash.js";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -55,6 +55,40 @@ export const registerUser = async (registrationData) => {
     id: user._id.toString(),
     first_name: user.first_name,
     last_name: user.last_name,
+    email: user.email,
+    role: user.role
+  };
+};
+// Login de usuario//
+export const loginUser = async ({ email, password } = {}) => {
+  if (
+    typeof email !== "string" ||
+    !email.trim() ||
+    typeof password !== "string" ||
+    !password
+  ) {
+    throw createClientError("Credenciales inválidas", 401);
+  }
+
+  const normalizedEmail = email.trim().toLowerCase();
+
+  const user = await getUserByEmail(normalizedEmail);
+
+  if (!user) {
+    throw createClientError("Credenciales inválidas", 401);
+  }
+
+  const isValidPassword = await comparePassword(
+    password,
+    user.password
+  );
+
+  if (!isValidPassword) {
+    throw createClientError("Credenciales inválidas", 401);
+  }
+
+  return {
+    id: user._id.toString(),
     email: user.email,
     role: user.role
   };

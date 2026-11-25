@@ -1,4 +1,7 @@
-import { registerUser } from "../services/sessions.service.js";
+import {
+  registerUser,
+  loginUser
+} from "../services/sessions.service.js";
 
 export const getSessionStatus = (req, res) => {
   res.status(200).json({
@@ -31,6 +34,30 @@ export const register = async (req, res) => {
     }
 
     console.error("Error al registrar usuario:", error);
+
+    return res.status(500).json({
+      status: "error",
+      message: "Error interno del servidor"
+    });
+  }
+};
+export const login = async (req, res) => {
+  try {
+    const user = await loginUser(req.body);
+
+    return res.status(200).json({
+      status: "success",
+      message: "Login correcto"
+    });
+  } catch (error) {
+    if (error.statusCode === 401) {
+      return res.status(401).json({
+        status: "error",
+        message: "Credenciales inválidas"
+      });
+    }
+
+    console.error("Error en login:", error);
 
     return res.status(500).json({
       status: "error",
