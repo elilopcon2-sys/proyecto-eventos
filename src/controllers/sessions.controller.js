@@ -43,7 +43,14 @@ export const register = async (req, res) => {
 };
 export const login = async (req, res) => {
   try {
-    const user = await loginUser(req.body);
+    const token = await loginUser(req.body);
+
+    res.cookie("currentUser", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 3600000
+    });
 
     return res.status(200).json({
       status: "success",
@@ -64,4 +71,28 @@ export const login = async (req, res) => {
       message: "Error interno del servidor"
     });
   }
+};
+
+export const current = (req, res) => {
+  return res.status(200).json({
+    status: "success",
+    payload: {
+      id: req.user.id,
+      email: req.user.email,
+      role: req.user.role
+    }
+  });
+};
+
+export const logout = (req, res) => {
+  res.clearCookie("currentUser", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production"
+  });
+
+  return res.status(200).json({
+    status: "success",
+    message: "Sesión cerrada"
+  });
 };

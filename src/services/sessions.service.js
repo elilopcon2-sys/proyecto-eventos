@@ -1,5 +1,6 @@
 import { getUserByEmail, saveUser } from "../repositories/users.repository.js";
 import { hashPassword, comparePassword } from "../utils/hash.js";
+import { generateToken } from "../utils/jwt.js";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -87,9 +88,13 @@ export const loginUser = async ({ email, password } = {}) => {
     throw createClientError("Credenciales inválidas", 401);
   }
 
-  return {
+  const userData = {
     id: user._id.toString(),
     email: user.email,
     role: user.role
   };
+
+  const token = generateToken(userData);
+
+  return token;
 };
